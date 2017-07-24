@@ -35,7 +35,7 @@ class ShowNoteViewController: UIViewController {
         
         let deleteAlert = UIAlertController(title: "Delete Note", message: "Are you sure you want to delete this note?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let yesAction = UIAlertAction(title: "Yes", style: .default) { (action) in
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
             if let noteToDelete = self.noteToShow {
                 let filteredNotes = notes.filter { $0.date != noteToDelete.date }
                 
@@ -46,7 +46,7 @@ class ShowNoteViewController: UIViewController {
             self.navigationController?.popViewController(animated: true)
         }
         deleteAlert.addAction(cancelAction)
-        deleteAlert.addAction(yesAction)
+        deleteAlert.addAction(deleteAction)
         present(deleteAlert, animated: true)
     }
 }
