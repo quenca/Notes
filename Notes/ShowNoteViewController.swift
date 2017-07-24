@@ -33,13 +33,20 @@ class ShowNoteViewController: UIViewController {
     
     @IBAction func deleteNote(_ sender: UIBarButtonItem) {
         
-        if let noteToDelete = noteToShow {
-            let filteredNotes = notes.filter { $0.date != noteToDelete.date }
-        
-            let array = serialize(filteredNotes)
-            (array as NSArray).write(toFile: filePath, atomically: true)
+        let deleteAlert = UIAlertController(title: "Delete Note", message: "Are you sure you want to delete this note?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let yesAction = UIAlertAction(title: "Yes", style: .default) { (action) in
+            if let noteToDelete = self.noteToShow {
+                let filteredNotes = notes.filter { $0.date != noteToDelete.date }
+                
+                let array = serialize(filteredNotes)
+                (array as NSArray).write(toFile: filePath, atomically: true)
+            }
+            
+            self.navigationController?.popViewController(animated: true)
         }
-        
-        self.navigationController?.popViewController(animated: true)
+        deleteAlert.addAction(cancelAction)
+        deleteAlert.addAction(yesAction)
+        present(deleteAlert, animated: true)
     }
 }
