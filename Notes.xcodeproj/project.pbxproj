@@ -340,6 +340,7 @@
 				E4085A851F25971B005B102B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

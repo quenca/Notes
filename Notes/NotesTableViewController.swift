@@ -35,29 +35,6 @@ class NotesTableViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func home(_ sender: UIStoryboardSegue) {}
-
-    // MARK: - TableViewDataSource
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        cell.textLabel?.text = notes[indexPath.row].title
-        cell.detailTextLabel?.text = notes[indexPath.row].date
-
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showNote", sender: notes[indexPath.row])
-    }
     
     // MARK: - UIStoryboardSegue Method
     
@@ -66,5 +43,29 @@ class NotesTableViewController: UITableViewController {
             let showNoteViewController = segue.destination as! ShowNoteViewController
             showNoteViewController.noteToShow = sender as? Note
         }
+    }
+}
+
+// MARK: - TableViewDataSource
+extension NotesTableViewController {
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return notes.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        
+        cell.textLabel?.text = notes[indexPath.row].title
+        cell.detailTextLabel?.text = notes[indexPath.row].date
+        
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showNote", sender: notes[indexPath.row])
     }
 }

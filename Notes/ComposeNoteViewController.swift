@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ComposeNoteViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+class ComposeNoteViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet weak var titleTextField: UITextField!
@@ -23,49 +23,6 @@ class ComposeNoteViewController: UIViewController, UITextFieldDelegate, UITextVi
         super.viewDidLoad()
         
         setUp()
-    }
-    
-    // MARK: - UIResponder Properties
-    
-    override var canBecomeFirstResponder: Bool{
-        return true
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.becomeFirstResponder()
-    }
-    
-    // MARK: - UITextFieldDelegate
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return true
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField.text?.isEmpty == true {
-            presentAlert()
-        } else {
-            self.bodyTextView.becomeFirstResponder()
-        }
-        return true
-    }
-    
-    //MARK: - UITextViewDelegate
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if self.titleTextField.text?.isEmpty == true {
-            presentAlert()
-        } else {
-            if textView.text == placeholder {
-                setUpTextView(atStart: false)
-            }
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            setUpTextView(atStart: true)
-        }
     }
     
     // MARK: - Methods
@@ -106,7 +63,7 @@ class ComposeNoteViewController: UIViewController, UITextFieldDelegate, UITextVi
         }
         
         let note = Note(title: titleTextField.text!, body: bodyTextView.text)
-        notes.append(note)
+        notes.insert(note, at: 0)
         
         let array = serialize(notes)
         (array as NSArray).write(toFile: filePath, atomically: true)
@@ -114,4 +71,51 @@ class ComposeNoteViewController: UIViewController, UITextFieldDelegate, UITextVi
         self.navigationController?.popViewController(animated: true)
     }
     
+}
+
+// MARK: - UIResponder
+extension ComposeNoteViewController {
+    override var canBecomeFirstResponder: Bool{
+        return true
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.becomeFirstResponder()
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension ComposeNoteViewController: UITextFieldDelegate {
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return true
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.text?.isEmpty == true {
+            presentAlert()
+        } else {
+            self.bodyTextView.becomeFirstResponder()
+        }
+        return true
+    }
+}
+
+// MARK: - UITextViewDelegate
+extension ComposeNoteViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if self.titleTextField.text?.isEmpty == true {
+            presentAlert()
+        } else {
+            if textView.text == placeholder {
+                setUpTextView(atStart: false)
+            }
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            setUpTextView(atStart: true)
+        }
+    }
 }
